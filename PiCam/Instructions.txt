@@ -1,0 +1,40 @@
+To get the Raspberry Pi Cam V2.1 working with OpenCV
+
+From: https://www.uco.es/investiga/grupos/ava/node/40
+
+0) Make sure you have CMAKE installed
+
+sudo apt-get update
+sudo apt-get install cmake
+
+1) Make sure camera is plugged into correct port
+2) Turn on camera with sudo raspi-config
+3) Copy raspicam-0.1.6 folder to Pi
+4) Make raspicam project in a build folder
+
+cd raspicam-0.1.6
+mkdir build
+cd build
+cmake ..
+
+5) Complete the install 
+
+make
+sudo make install
+sudo ldconfig
+
+6) Test by running the test build
+
+Copy to your code folder the header file:
+raspicam_cv.h
+
+Add to your compile flags:
+-I/usr/local/include/
+
+Add to your link flags:
+-lraspicam -lraspicam_cv 
+
+* Note the >> operator was not implemented by the raspicam system, instead use:
+
+cap.grab();
+cap.retrieve(frame);

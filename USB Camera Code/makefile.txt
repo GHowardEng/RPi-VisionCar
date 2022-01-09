@@ -1,0 +1,16 @@
+CC=g++
+
+CFLAGS=-Wall `pkg-config --cflags opencv` -std=c++11 -c
+
+LDFLAGS=-Wall `pkg-config --libs opencv` -o
+
+all: cam
+
+Sorting: main.o 
+	$(CC) $(LDFLAGS) cam main.o -lwiringPi -lpigpio 
+	
+main.o: main.cpp
+	$(CC) $(CFLAGS) main.cpp
+	
+clean:
+	rm *o TestControl
