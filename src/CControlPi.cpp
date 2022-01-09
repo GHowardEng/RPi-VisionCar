@@ -6,7 +6,7 @@
 
 #include <iostream>
 
-#define max 65
+
 using namespace std;
 
 CControlPi::CControlPi()
@@ -24,8 +24,9 @@ CControlPi::CControlPi()
 	gpioSetMode(Bi2, PI_OUTPUT);
 	gpioSetMode(STBY, PI_OUTPUT);
 	
-	//CControlPi::stop();
+	CControlPi::setSpeed(0);
 }
+
 bool CControlPi::get_data(int type, int channel, int &value)
 {
 	if (type == DIGITAL)
@@ -126,23 +127,23 @@ void CControlPi::forward(void)
 	
 	if (CControlPi::drive != FORWARD){
 		cout << "accel\n";
-		for (int i = 5; i < max; i+=5){
-			 softPwmWrite(PWMa, i );
+		for (int i = 5; i < pwmMid; i+=5){
+			softPwmWrite(PWMa, i );
 			softPwmWrite(PWMb, i - 3);
 			delay(40);
 		}
 	}
-	softPwmWrite(PWMa, max );
-	softPwmWrite(PWMb, max - 3);
+	softPwmWrite(PWMa, pwmMid );
+	softPwmWrite(PWMb, pwmMid - 3);
 	
 }
 
 void CControlPi::reverse(void)
 {
-	//CControlPi::stop();
+	CControlPi::stop();
 	
-	softPwmWrite(PWMa, max - 15 );
-	softPwmWrite(PWMb, max - 21);
+	softPwmWrite(PWMa, pwmMid - 15 );
+	softPwmWrite(PWMb, pwmMid - 21);
 	
 	CControlPi::set_data(DIGITAL, STBY, 1);		// Take out of standby
 			
@@ -157,9 +158,9 @@ void CControlPi::stop(void)
 {	
 	if(CControlPi::drive != STOP)
 	{
-		for(int i = 40; i > 0; i-=5){
+		for(int i = pwmMid; i > 0; i-=5){
 			CControlPi::setSpeed(i);
-			delay(20);
+			delay(40);
 		}
 	}
 	
@@ -212,12 +213,12 @@ void CControlPi::correct(int dir)		// Reduce motor speed on one side for correct
 {
 	if (dir == RIGHT)
 	{
-		softPwmWrite(PWMa, max - 35);
+		softPwmWrite(PWMa, pwmMid - 35);
 	}
 	
 	else if (dir == LEFT)
 	{
-		softPwmWrite(PWMb, max - 35);
+		softPwmWrite(PWMb, pwmMid - 35);
 	}
 	
 	delay(25);

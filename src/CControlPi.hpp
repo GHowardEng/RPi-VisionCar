@@ -22,12 +22,16 @@ enum DIR { LEFT = 0, RIGHT};
 #define SERVO_MAX 2500
 #define SERVO_MIN 700
 
+#define pwmMax 90
+#define pwmMid 60
+
 enum drive_state { STOP = 0, FORWARD, REVERSE };
 
 class CControlPi
 {
 private:
 	int lastval[5];  ///< Stores previous button state for de-bouncing
+	int speedA = 0, speedB = 0;
 	
 public:
 	CControlPi();
